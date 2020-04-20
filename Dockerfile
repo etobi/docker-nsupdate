@@ -1,6 +1,6 @@
 FROM php:7.2-alpine
 
-COPY . .
+COPY www /var/www/
 
 RUN apk update \
   && apk add bind-tools
