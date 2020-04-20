@@ -1,0 +1,15 @@
+# files
+.DS_Store
+.dockerignore
+.gitignore
+docker-compose.yml
+Dockerfile
+README.md
+
+# directories
+.git
+.idea
+dist
+k8s
+node_modules
+test
