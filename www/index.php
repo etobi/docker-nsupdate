@@ -42,7 +42,7 @@ if (!preg_match('/^[A-Za-z0-9\.+]+$/', $key)) {
 }
 
 
-$command = 'dig +short ' . $domain . ' @' . $server . ' A';
+$command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' A';
 $currentIp = exec($command);
 
 if ($currentIp === $ip) {
@@ -56,7 +56,7 @@ $update = 'server ' . $server . "\n"
     . 'update ADD ' . $domain . ' 60 A ' . $ip . "\n"
     . 'send' . "\n";
 
-$command = 'echo "' . $update . '" | /usr/bin/nsupdate -k "' . $keypath . $key . '.private' . '"';
+$command = 'echo ' . escapeshellarg($update) . ' | /usr/bin/nsupdate -k ' . escapeshellarg($keypath . $key . '.private');
 
 $output = '';
 $return = 0;
