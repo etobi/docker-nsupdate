@@ -12,8 +12,8 @@ if (!empty($ipv4) && !preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $ipv4)) {
     exit;
 }
 
-$ipv6 = strtoupper(trim($_GET['ipv6']));
-if (!empty($ipv6) && !preg_match('/^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$/', $ipv6)) {
+$ipv6 = strtolower(trim($_GET['ipv6']));
+if (!empty($ipv6) && !preg_match('/^(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}$/', $ipv6)) {
     echo 'invalid ipv6';
     http_response_code(400);
     exit;
@@ -78,7 +78,7 @@ if (!empty($ipv4)) {
 if (!empty($ipv6)) {
   foreach ($domains as $domain) {
     $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' AAAA';
-    $currentIp = strtoupper(exec($command));
+    $currentIp = strtolower(exec($command));
 
     if ($currentIp !== $ipv6) {
       $update[] = 'update DELETE ' . $domain . ' AAAA';
