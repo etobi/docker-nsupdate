@@ -12,7 +12,7 @@ if (!empty($ipv4) && !preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $ipv4)) {
     exit;
 }
 
-$ipv6 = trim($_GET['ipv6']);
+$ipv6 = strtoupper(trim($_GET['ipv6']));
 if (!empty($ipv6) && !preg_match('/^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$/', $ipv6)) {
     echo 'invalid ipv6';
     http_response_code(400);
