@@ -59,7 +59,7 @@ if (!preg_match('/^[A-Za-z0-9\.+]+$/', $key)) {
 
 $update = [];
 $update[] = 'server ' . $server;
-$update[] = . 'zone ' . $zone;
+$update[] = 'zone ' . $zone;
 
 if (!empty($ipv4)) {
   $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' A';
