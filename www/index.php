@@ -41,12 +41,14 @@ if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\.?$/', $zone)) {
     exit;
 }
 
-$domain = trim($_GET['domain']);
-// domain, subdomain or wildcard. might be relative to zone or absolute ("foobar" or "foobar.mydomain.de." or "*")
-if (!preg_match('/^(((\*)|([a-z0-9]+(-[a-z0-9]+)*))\.)+[a-z]{2,}\.?$/', $domain)) {
-    echo 'invalid domain';
-    http_response_code(400);
-    exit;
+$domains = explode(',', trim($_GET['domain']));
+foreach ($domains as $domain) {
+  // domain, subdomain or wildcard. might be relative to zone or absolute ("foobar" or "foobar.mydomain.de." or "*")
+  if (!preg_match('/^(((\*)|([a-z0-9]+(-[a-z0-9]+)*))\.)+[a-z]{2,}\.?$/', $domain)) {
+      echo 'invalid domain';
+      http_response_code(400);
+      exit;
+  }
 }
 
 $key = trim($_GET['key']);
@@ -62,22 +64,26 @@ $update[] = 'server ' . $server;
 $update[] = 'zone ' . $zone;
 
 if (!empty($ipv4)) {
-  $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' A';
-  $currentIp = exec($command);
+  foreach ($domains as $domain) {
+    $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' A';
+    $currentIp = exec($command);
 
-  if ($currentIp !== $ipv4) {
-    $update[] = 'update DELETE ' . $domain . ' A';
-    $update[] = 'update ADD ' . $domain . ' 60 A ' . $ipv4;
+    if ($currentIp !== $ipv4) {
+      $update[] = 'update DELETE ' . $domain . ' A';
+      $update[] = 'update ADD ' . $domain . ' 60 A ' . $ipv4;
+    }
   }
 }
 
 if (!empty($ipv6)) {
-  $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' AAAA';
-  $currentIp = exec($command);
+  foreach ($domains as $domain) {
+    $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' AAAA';
+    $currentIp = exec($command);
 
-  if ($currentIp !== $ipv6) {
-    $update[] = 'update DELETE ' . $domain . ' AAAA';
-    $update[] = 'update ADD ' . $domain . ' 60 AAAA ' . $ipv6;
+    if ($currentIp !== $ipv6) {
+      $update[] = 'update DELETE ' . $domain . ' AAAA';
+      $update[] = 'update ADD ' . $domain . ' 60 AAAA ' . $ipv6;
+    }
   }
 }
 
