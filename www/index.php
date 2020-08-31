@@ -78,7 +78,7 @@ if (!empty($ipv4)) {
 if (!empty($ipv6)) {
   foreach ($domains as $domain) {
     $command = 'dig +short ' . escapeshellarg($domain) . ' ' . escapeshellarg('@' . $server) . ' AAAA';
-    $currentIp = exec($command);
+    $currentIp = strtoupper(exec($command));
 
     if ($currentIp !== $ipv6) {
       $update[] = 'update DELETE ' . $domain . ' AAAA';
