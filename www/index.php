@@ -6,14 +6,14 @@ $keypath = '/var/keys/';
 // https://www.example.com/nsupdate/nsupdate.php?ip=<ipaddr>&server=ns1.hw33.de&zone=hw33.de.&domain=*.hw33.de.&key=Khw33.de.%2B123%2B45678
 
 $ipv4 = trim($_GET['ip']);
-if (!preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $ipv4)) {
+if (!empty($ipv4) && !preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $ipv4)) {
     echo 'invalid ip';
     http_response_code(400);
     exit;
 }
 
 $ipv6 = trim($_GET['ipv6']);
-if (!preg_match('/^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$/', $ipv6)) {
+if (!empty($ipv6) && !preg_match('/^(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}$/', $ipv6)) {
     echo 'invalid ipv6';
     http_response_code(400);
     exit;
