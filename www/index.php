@@ -5,14 +5,14 @@ $keypath = '/var/keys/';
 // ----------------------------------------------------------------------------
 // https://www.example.com/nsupdate/nsupdate.php?ip=<ipaddr>&server=ns1.hw33.de&zone=hw33.de.&domain=*.hw33.de.&key=Khw33.de.%2B123%2B45678
 
-$ipv4 = trim($_GET['ip']);
+$ipv4 = trim($_GET['ip'] ?: '');
 if (!empty($ipv4) && !preg_match('/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/', $ipv4)) {
     echo 'invalid ip';
     http_response_code(400);
     exit;
 }
 
-$ipv6 = strtolower(trim($_GET['ipv6']));
+$ipv6 = strtolower(trim($_GET['ipv6'] ?: ''));
 if (!empty($ipv6) && !preg_match('/^(?:[a-f0-9]{1,4}:){7}[a-f0-9]{1,4}$/', $ipv6)) {
     echo 'invalid ipv6';
     http_response_code(400);
@@ -25,7 +25,7 @@ if (empty($ipv6) && empty($ipv4)) {
     exit;
 }
 
-$server = trim($_GET['server']);
+$server = trim($_GET['server'] ?: '');
 // must be a valid domain name
 if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\.?$/', $server)) {
     echo 'invalid server';
@@ -33,7 +33,7 @@ if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\.?$/', $server)) {
     exit;
 }
 
-$zone = trim($_GET['zone']);
+$zone = trim($_GET['zone'] ?: '');
 // must be an existing zone in your bind
 if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\.?$/', $zone)) {
     echo 'invalid zone';
@@ -41,7 +41,7 @@ if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}\.?$/', $zone)) {
     exit;
 }
 
-$domains = explode(',', trim($_GET['domain']));
+$domains = explode(',', trim($_GET['domain'] ?: ''));
 foreach ($domains as $domain) {
   // domain, subdomain or wildcard. might be relative to zone or absolute ("foobar" or "foobar.mydomain.de." or "*")
   if (!preg_match('/^(((\*)|([a-z0-9]+(-[a-z0-9]+)*))\.)+[a-z]{2,}\.?$/', $domain)) {
@@ -51,7 +51,7 @@ foreach ($domains as $domain) {
   }
 }
 
-$key = trim($_GET['key']);
+$key = trim($_GET['key'] ?: '');
 // key file name (without the ".private" extension)
 if (!preg_match('/^[A-Za-z0-9\.\-+]+$/', $key)) {
     echo 'invalid key';
