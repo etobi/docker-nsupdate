@@ -53,7 +53,7 @@ foreach ($domains as $domain) {
 
 $key = trim($_GET['key']);
 // key file name (without the ".private" extension)
-if (!preg_match('/^[A-Za-z0-9\.+]+$/', $key)) {
+if (!preg_match('/^[A-Za-z0-9\.\-+]+$/', $key)) {
     echo 'invalid key';
     http_response_code(400);
     exit;
